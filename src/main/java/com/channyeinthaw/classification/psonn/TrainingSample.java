@@ -42,7 +42,7 @@ public class TrainingSample {
             inputs[i] = Double.parseDouble(in[i]);
         }
 
-        outputs[labelIndex] = Double.parseDouble(in[labelIndex]);
+        outputs[labelIndex - (outputLayerSize + 1)] = Double.parseDouble(in[labelIndex]);
     }
 
     public String toString() {

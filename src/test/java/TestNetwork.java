@@ -12,11 +12,13 @@ public class TestNetwork {
     public static void main(String[] args) {
         Log.setLogger(new Logger(Logger.Type.Console, "PSOTEST"));
 
+//        TrainingSample.load("C:\test.txt", 1, 2);
+
         TrainingSample[] samples = new TrainingSample[]{
-                new TrainingSample("0,1 0"),
-                new TrainingSample("0,1 0"),
-                new TrainingSample("1,1 1"),
-                new TrainingSample("1,0 0"),
+                new TrainingSample("0,1,0", 1, 2),
+                new TrainingSample("0,1,0", 1, 2),
+                new TrainingSample("1,1,1", 1, 2),
+                new TrainingSample("1,0,0", 1, 2),
         };
 
         double[][] initialSwarmData = new double[30][];
