@@ -151,7 +151,7 @@ public class Main {
         NNSwarmBuilder b = new NNSwarmBuilder(swarmSize);
         b.setNetworkSchema(() -> Network.build(networkSchema));
         b.setObjectiveFunction(p -> {
-            Network n = Network.build(2,1);
+            Network n = Network.build(networkSchema);
             n.updateWeightsAndBias(p);
             return n.computeMSE(dataset);
         });
