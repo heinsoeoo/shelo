@@ -1,16 +1,19 @@
 package com.channyeinthaw.classification.psonn;
 
 import com.channyeinthaw.optimization.pso.ObjectiveFunction;
+import com.channyeinthaw.optimization.pso.Particle;
 import com.channyeinthaw.optimization.pso.Swarm;
 import com.channyeinthaw.util.Log;
 import com.channyeinthaw.util.Logger;
 
+import java.util.Arrays;
+
 public class NNSwarmBuilder {
-    private TrainingSample[] samples;
     private NNSchema schema;
 
     private int swarmSize;
     private ObjectiveFunction f;
+    private Swarm swarm;
 
     public NNSwarmBuilder(int _swarmSize) {
         swarmSize = _swarmSize;
@@ -27,7 +30,20 @@ public class NNSwarmBuilder {
         s.setObjectiveFunction(f);
         s.initializeSwarm(getInitialSwarmData(), c1, c2);
 
+        swarm = s;
         return s;
+    }
+
+    public Network[] getBestNetworks() {
+        int i = 0;
+        Network[] networks = new Network[swarmSize];
+        for(Particle p: swarm.getSwarm()) {
+            Network n = schema.get();
+            n.updateWeightsAndBias(p.getPositions());
+            networks[i++] = n;
+        }
+
+        return networks;
     }
 
     private double[][] getInitialSwarmData() {
