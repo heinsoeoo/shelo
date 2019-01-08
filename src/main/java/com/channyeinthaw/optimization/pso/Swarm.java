@@ -2,16 +2,66 @@ package com.channyeinthaw.optimization.pso;
 
 import com.channyeinthaw.util.Log;
 
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Swarm {
     private Particle[] swarm;
     private double[] gBestPositions;
 
     private ObjectiveFunction f;
+    private File saveDir;
 
     public Swarm(int swarmSize) {
         swarm = new Particle[swarmSize];
 
         Log.setTag("PSO/SWARM");
+    }
+
+    public Swarm(String path, ObjectiveFunction f) throws IOException {
+        this.f = f;
+        BufferedReader r = new BufferedReader(new FileReader(new File(path)));
+
+        String[] gbests = r.readLine().split(",");
+        gBestPositions = new double[gbests.length];
+
+        int i = 0;
+        for(String p: gbests) {
+            gBestPositions[i++] = Double.parseDouble(p);
+        }
+
+        List<Particle> particles = new ArrayList<>();
+        String line;
+        while((line = r.readLine()) != null) {
+            Particle p = new Particle(line);
+            p.setObjectFunction(f);
+            p.setSwarm(this);
+            particles.add(p);
+        }
+
+        swarm = particles.toArray(new Particle[]{});
+
+        Log.setTag("PSO/SWARM");
+    }
+
+    public String toString() {
+        StringBuilder gBests = new StringBuilder();
+
+        for(double p: gBestPositions) {
+            gBests.append(p);
+            gBests.append(",");
+        }
+
+        String gBestPositions = gBests.substring(0, gBests.length() - 1) + "\n";
+        StringBuilder _swarm = new StringBuilder();
+
+        for(Particle p: swarm) {
+            _swarm.append(p.toString());
+            _swarm.append("\n");
+        }
+
+        return gBestPositions + _swarm.substring(0, _swarm.length() - 1);
     }
 
     public void initializeSwarm(double[][] initialPositions, double c1, double c2) {
@@ -26,21 +76,22 @@ public class Swarm {
         }
     }
 
-    public void run(double mseLimit, double w0, double wlb) {
-        int i = 1;
+    public void run(double mseLimit, double w0, double wlb) throws IOException {
+        int i = 1, j = 0;
         do {
             Log.info("Iteration " + i ++);
-        } while (run(w0, wlb) > mseLimit);
+            j++;
+        } while (run(w0, wlb, j) > mseLimit);
     }
 
-    public void run(int iteration, double w0, double wlb) {
+    public void run(int iteration, double w0, double wlb) throws IOException {
         for(int i = 0; i < iteration; i++) {
             Log.info("Iteration " + i);
-            run(w0, wlb);
+            run(w0, wlb, i);
         }
     }
 
-    private double run(double w0, double wlb) {
+    private double run(double w0, double wlb, int iter) throws IOException {
         Log.info("Updating pBest and gBest");
 
         for(Particle p: swarm) {
@@ -61,6 +112,21 @@ public class Swarm {
             p.updatePositions();
 
             sumMSE += p.calculate();
+        }
+
+        if (saveDir != null) {
+            if (saveDir.exists() && saveDir.isDirectory()) {
+                Log.info("Saving ...");
+
+                File saveFile = new File(saveDir.getAbsolutePath() + "/iter_" + iter + ".pso");
+
+                if (saveFile.createNewFile()) {
+                    PrintWriter pw = new PrintWriter(new FileWriter(saveFile));
+                    pw.write(toString());
+
+                    pw.close();
+                }
+            }
         }
 
         Log.divider();
@@ -89,5 +155,9 @@ public class Swarm {
 
     double getGBestPositionAt(int index) {
         return gBestPositions[index];
+    }
+
+    public void setSaveDir(String sDir) {
+        saveDir = new File(sDir);
     }
 }
