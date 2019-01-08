@@ -131,6 +131,7 @@ public class Swarm {
             }
 
         } catch (IOException e) { }
+        Log.info("EMSE " + (sumMSE / swarm.length));
         Log.divider();
 
         return sumMSE / swarm.length;
