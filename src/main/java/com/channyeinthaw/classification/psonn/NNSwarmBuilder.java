@@ -42,5 +42,5 @@ public class NNSwarmBuilder {
 
     public void setNetworkSchema(NNSchema n) { schema = n; }
 
-    public static interface NNSchema { public Network get();}
+    public interface NNSchema { Network get();}
 }
