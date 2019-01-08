@@ -21,8 +21,8 @@ public class Layer {
         String[] meta = data[0].split(",");
         String[] weights = data[1].split(",");
 
-        int b = Integer.parseInt(meta[1]);
-        int r = Integer.parseInt(meta[2]), c = Integer.parseInt(meta[3]);
+        int b = Integer.parseInt(meta[0]);
+        int r = Integer.parseInt(meta[1]), c = Integer.parseInt(meta[2]);
 
         double[] bias = new double[b];
         double[][] neurons = new double[r][c];
