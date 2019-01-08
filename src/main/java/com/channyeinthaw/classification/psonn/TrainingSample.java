@@ -70,7 +70,7 @@ public class TrainingSample {
         return outputs;
     }
 
-    public static List<TrainingSample> load(String file, int outputLayerSize, int labelIndex) throws IOException  {
+    public static TrainingSample[] load(String file, int outputLayerSize, int labelIndex) throws IOException  {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String line;
         List<TrainingSample> samples = new ArrayList<>();
@@ -82,6 +82,6 @@ public class TrainingSample {
                 samples.add(new TrainingSample(line, outputLayerSize, labelIndex));
         }
 
-        return samples;
+        return samples.toArray(new TrainingSample[]{});
     }
 }
