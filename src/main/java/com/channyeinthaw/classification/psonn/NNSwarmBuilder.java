@@ -35,10 +35,15 @@ public class NNSwarmBuilder {
     }
 
     public Network[] getBestNetworks() {
+        return getBestNetworks(swarm, schema);
+    }
+
+    public static Network[] getBestNetworks(Swarm s, NNSchema sc) {
         int i = 0;
-        Network[] networks = new Network[swarmSize];
-        for(Particle p: swarm.getSwarm()) {
-            Network n = schema.get();
+        Particle[] particles = s.getSwarm();
+        Network[] networks = new Network[particles.length];
+        for(Particle p: particles) {
+            Network n = sc.get();
             n.updateWeightsAndBias(p.getPositions());
             networks[i++] = n;
         }
