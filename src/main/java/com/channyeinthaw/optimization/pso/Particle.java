@@ -19,6 +19,53 @@ public class Particle {
         c2 = a2;
     }
 
+    Particle(String particle) {
+        String[] parts = particle.split(" ");
+        String[] c12Inertia = parts[0].split(",");
+        String[] poss = parts[1].split(",");
+        String[] pBest = parts[2].split(",");
+        String[] velos = parts[3].split(",");
+
+        for(int i = 0; i < poss.length; i++) {
+            positions[i] = Double.parseDouble(poss[i]);
+            pBestPositions[i] = Double.parseDouble(pBest[i]);
+            velocities[i] = Double.parseDouble(velos[i]);
+        }
+
+        c1 = Double.parseDouble(c12Inertia[0]);
+        c2 = Double.parseDouble(c12Inertia[1]);
+        inertia = Double.parseDouble(c12Inertia[2]);
+    }
+
+    public String toString() {
+        StringBuilder poss = new StringBuilder();
+        StringBuilder pBest = new StringBuilder();
+        StringBuilder velos = new StringBuilder();
+
+        String c12Inertia = String.format("%f,%f,%f", c1, c2, inertia);
+
+        int i = 0;
+        for(double p: positions) {
+            poss.append(p);
+            poss.append(",");
+
+            pBest.append(pBestPositions[i]);
+            pBest.append(",");
+
+            velos.append(velocities[i]);
+            velos.append(",");
+
+            i++;
+        }
+
+        int end = poss.length() - 1;
+        String positions = poss.substring(0, end);
+        String pBestPositions = pBest.substring(0, end);
+        String velocities = velos.substring(0, end);
+
+        return String.format("%s %s %s %s", c12Inertia, positions, velocities, pBestPositions);
+    }
+
     public void updatePersonalBest() {
         double currentResult = f.calculate(positions);
         double pBestResult = calculate();
