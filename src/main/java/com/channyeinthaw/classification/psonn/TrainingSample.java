@@ -36,13 +36,14 @@ public class TrainingSample {
         String[] in = inputAndOutput.split(",");
 
         outputs = new double[outputLayerSize];
-        inputs = new double[in.length];
+        inputs = new double[in.length - 1];
 
         for(int i = 0; i < labelIndex; i++) {
             inputs[i] = Double.parseDouble(in[i]);
         }
 
-        outputs[labelIndex - (outputLayerSize + 1)] = Double.parseDouble(in[labelIndex]);
+        int index = Integer.parseInt(in[labelIndex]);
+        outputs[index] = 1;
     }
 
     public String toString() {
