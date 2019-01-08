@@ -106,17 +106,23 @@ public class Network {
         buf.close();
     }
 
-    /**
-     * Load network data weights and bias from file
-     * @param path - file path
-     * @throws IOException io
-     */
+    public static Network load(InputStream model) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(model));
+
+        return load(reader);
+    }
+
     public static Network load(String path) throws IOException {
         File file = new File(path);
 
         if (!file.exists()) return null;
 
         BufferedReader reader = new BufferedReader(new FileReader(file));
+
+        return load(reader);
+    }
+
+    public static Network load(BufferedReader reader) throws IOException {
         String line;
         List<Layer> layers = new ArrayList<>();
         String activationType = "";
