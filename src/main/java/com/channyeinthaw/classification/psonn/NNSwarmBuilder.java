@@ -42,10 +42,25 @@ public class NNSwarmBuilder {
         int i = 0;
         Particle[] particles = s.getSwarm();
         Network[] networks = new Network[particles.length];
+
+        double best = particles[0].calculate();
+
         for(Particle p: particles) {
             Network n = sc.get();
             n.updateWeightsAndBias(p.getPositions());
-            networks[i++] = n;
+
+            double mse = p.calculate();
+            if (mse < best) {
+                best = mse;
+
+                Network tmp0 = networks[0];
+                networks[0] = n;
+                networks[i] = tmp0;
+            } else {
+                networks[i] = n;
+            }
+
+            i++;
         }
 
         return networks;
