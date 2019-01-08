@@ -26,6 +26,10 @@ public class Particle {
         String[] pBest = parts[2].split(",");
         String[] velos = parts[3].split(",");
 
+        positions = new double[poss.length];
+        pBestPositions = new double[pBest.length];
+        velocities = new double[velos.length];
+
         for(int i = 0; i < poss.length; i++) {
             positions[i] = Double.parseDouble(poss[i]);
             pBestPositions[i] = Double.parseDouble(pBest[i]);
@@ -58,10 +62,9 @@ public class Particle {
             i++;
         }
 
-        int end = poss.length() - 1;
-        String positions = poss.substring(0, end);
-        String pBestPositions = pBest.substring(0, end);
-        String velocities = velos.substring(0, end);
+        String positions = poss.substring(0, poss.length() - 1);
+        String pBestPositions = pBest.substring(0, pBest.length() - 1);
+        String velocities = velos.substring(0, velos.length() - 1);
 
         return String.format("%s %s %s %s", c12Inertia, positions, velocities, pBestPositions);
     }
