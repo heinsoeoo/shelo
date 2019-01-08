@@ -76,7 +76,7 @@ public class Swarm {
         }
     }
 
-    public void run(double mseLimit, double w0, double wlb) throws IOException {
+    public void run(double mseLimit, double w0, double wlb) {
         int i = 1, j = 0;
         do {
             Log.info("Iteration " + i ++);
@@ -84,14 +84,14 @@ public class Swarm {
         } while (run(w0, wlb, j) > mseLimit);
     }
 
-    public void run(int iteration, double w0, double wlb) throws IOException {
+    public void run(int iteration, double w0, double wlb) {
         for(int i = 0; i < iteration; i++) {
             Log.info("Iteration " + i);
             run(w0, wlb, i);
         }
     }
 
-    private double run(double w0, double wlb, int iter) throws IOException {
+    private double run(double w0, double wlb, int iter) {
         Log.info("Updating pBest and gBest");
 
         for(Particle p: swarm) {
@@ -114,21 +114,23 @@ public class Swarm {
             sumMSE += p.calculate();
         }
 
-        if (saveDir != null) {
-            if (saveDir.exists() && saveDir.isDirectory()) {
-                Log.info("Saving ...");
+        try {
+            if (saveDir != null) {
+                if (saveDir.exists() && saveDir.isDirectory()) {
+                    Log.info("Saving ...");
 
-                File saveFile = new File(saveDir.getAbsolutePath() + "/iter_" + iter + ".pso");
+                    File saveFile = new File(saveDir.getAbsolutePath() + "/iter_" + iter + ".pso");
 
-                if (saveFile.createNewFile()) {
-                    PrintWriter pw = new PrintWriter(new FileWriter(saveFile));
-                    pw.write(toString());
+                    if (saveFile.createNewFile()) {
+                        PrintWriter pw = new PrintWriter(new FileWriter(saveFile));
+                        pw.write(toString());
 
-                    pw.close();
+                        pw.close();
+                    }
                 }
             }
-        }
 
+        } catch (IOException e) { }
         Log.divider();
 
         return sumMSE / swarm.length;
